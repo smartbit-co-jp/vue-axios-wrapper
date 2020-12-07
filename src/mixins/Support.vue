@@ -3,24 +3,23 @@ export default {
     data() {
         return {
             sbSending: false,
-            mixinErrors: []
+            sbErrors: []
         }
     },
     methods: {
         then(response) {
             if (response.data.message) {
-                this.toast(response.data.message, { variant: "success" })
+                this.sbToast(response.data.message, { variant: "success" })
             } else {
-                this.toast("saved!", { variant: "success" })
+                this.sbToast("saved!", { variant: "success" })
             }
         },
-        catch(error, useCustomErrorsPosition) {
-            this.mixinErrors = error.response.data.errors || []
-            console.log(this.mixinErrors)
+        catch(error, shouldDisplayToast) {
+            this.sbErrors = error.response.data.errors || []
             if (this.isset(() => error.response.data.errors.custom_errors)) {
-                if (!useCustomErrorsPosition) {
+                if (shouldDisplayToast) {
                     error.response.data.errors.custom_errors.forEach((error, index, array) => {
-                        this.toast(error, { variant: "danger" })
+                        this.sbToast(error, { variant: "danger" })
                     })
                 }
             }
@@ -29,16 +28,12 @@ export default {
             method,
             url,
             data = {},
-            {
-                useCustomErrorsPosition = false,
-                onStart = () => ({}),
-                onFinish = () => ({}),
-                onSuccess = () => ({})
-            } = {}
+            { shouldDisplayToast = true, onStart = () => ({}), onFinish = () => ({}), onSuccess = () => ({}) } = {}
         ) {
             onStart()
-            this.mixinErrors = {}
+            this.sbErrors = {}
             this.sbSending = true
+            this.$root.errors = []
 
             if (method === "post") {
                 axios
@@ -49,7 +44,7 @@ export default {
                         onSuccess()
                     })
                     .catch((error) => {
-                        this.catch(error, useCustomErrorsPosition)
+                        this.catch(error, shouldDisplayToast)
                     })
                     .finally(() => {
                         this.sbSending = false
@@ -63,23 +58,33 @@ export default {
                         onSuccess()
                     })
                     .catch((error) => {
-                        this.catch(error, useCustomErrorsPosition)
+                        this.catch(error, shouldDisplayToast)
                     })
                     .finally(() => {
                         this.sbSending = false
                         onFinish()
                     })
             }
-        },
-        isset(accessor) {
-            // usage  this.isset(() => some.nested.deeper.value) // false
-            try {
-                return typeof accessor() !== "undefined"
-            } catch (e) {
-                return false
+            function toast(message, options = {}) {
+                if (this.$root.sbAxiosWrapper == null) {
+                    options.title = "info"
+                }
+                if (options.variant == null) {
+                    options.variant = "info"
+                }
+                this.$root.$bvToast.toast(message, options)
             }
         },
-        toast(message, options = {}) {
+        sbToast(message, options = {}) {
+            options.title = this.isset(() => this.$root.sbAxiosWrapper.toast.title)
+                ? this.$root.sbAxiosWrapper.toast.title
+                : "info"
+            message = this.isset(() => this.$root.sbAxiosWrapper.toast.defaultMessage)
+                ? this.$root.sbAxiosWrapper.toast.defaultMessage
+                : message
+            if (options.variant == null) {
+                options.variant = "info"
+            }
             this.$root.$bvToast.toast(message, options)
         }
     }

@@ -62,3 +62,19 @@ public function store(UserRequest $request)
         }
     }
 ```
+
+### customization
+
+```js
+var app = new Vue({
+    data:{
+        sbAxiosWrapper:{
+          toast:{
+            title: 'ezHaken',
+            defaultMessage: '保存しました。'
+          }
+        }
+    },
+    mixins: [require('spark')],
+});
+```
