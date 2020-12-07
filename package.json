@@ -1,6 +1,6 @@
 {
   "name": "sb-axios-wrapper",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "axios wrapper",
   "main": "index.js",
   "scripts": {
