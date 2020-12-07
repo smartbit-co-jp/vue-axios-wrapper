@@ -27,7 +27,7 @@ this.request("post", `${this.route}`, this.form, {
 });
 ```
 
-### Se não quiser exibir os erros no lugar padrão(não inclui os erros do validation).
+### Se não quiser exibir os erros no lugar padrão(não inclui os erros do validation):
 
 ```js
 this.request("post", `${this.route}`, this.form, {
@@ -45,7 +45,7 @@ Com o componente abaixo, exiba os erros onde quiser.
 <display-errors :errors-prop="errors.custom_errors"></display-errors>
 ```
 
-### No controller
+### No controller:
 
 ```php
 public function store(UserRequest $request)
