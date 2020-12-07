@@ -6,9 +6,9 @@
 
 ---
 
-### modo de usar basico
+### Modo de usar básico:
 
-pode ser método post ou put.
+Pode ser método, post ou put.
 
 ```js
 this.request("post", `${this.route}`, this.form);
@@ -16,7 +16,7 @@ this.request("post", `${this.route}`, this.form);
 
 ---
 
-### com opcionais
+### Com opcionais:
 
 ```js
 this.request("post", `${this.route}`, this.form, {
@@ -27,7 +27,7 @@ this.request("post", `${this.route}`, this.form, {
 });
 ```
 
-### não exibir os erros no lugar padrão (não inclui os erros do validation)
+### Se não quiser exibir os erros no lugar padrão(não inclui os erros do validation).
 
 ```js
 this.request("post", `${this.route}`, this.form, {
@@ -39,13 +39,13 @@ this.request("post", `${this.route}`, this.form, {
 })
 ```
 
-Com o componente abaixo exiba o erros aonde quiser.
+Com o componente abaixo, exiba os erros onde quiser.
 
 ```html
 <display-errors :errors-prop="errors.custom_errors"></display-errors>
 ```
 
-### no controller
+### No controller
 
 ```php
 public function store(UserRequest $request)
