@@ -11,7 +11,7 @@
 Pode ser método, post ou put.
 
 ```js
-this.request("post", `${this.route}`, this.form);
+this.request("post", this.route, this.form);
 ```
 
 ---
@@ -20,7 +20,7 @@ this.request("post", `${this.route}`, this.form);
 
 ```js
 this.request("post", `${this.route}`, this.form, {
-  onSuccess: () => {
+  onSuccess: () => { // método a ser chamado se o post der certo
     this.$emit("saved");
     this.showModal = false;
   },
@@ -31,18 +31,14 @@ this.request("post", `${this.route}`, this.form, {
 
 ```js
 this.request("post", `${this.route}`, this.form, {
-  useCustomErrorsPosition:true
-  onSuccess: () => {
-      this.$emit("saved")
-      this.showModal = false
-  }
+  shouldDisplayToast:false // adicione essa linha
 })
 ```
 
 Com o componente abaixo, exiba os erros onde quiser.
 
 ```html
-<display-errors :errors-prop="errors.custom_errors"></display-errors>
+<display-errors :errors="sbErrors.custom_errors"></display-errors>
 ```
 
 ### No controller:
@@ -52,17 +48,22 @@ public function store(UserRequest $request)
     {
         try {
             User::create($request->validated());
+            // Se passar essa chave "message", essa mensagem será exibida automaticamente no Vue, sa não, será exibida uma mensagem padrão
             return response()->json(['message' => 'usuário salvo com sucesso.']); // mensagem customizada (opcional)
         } catch (\Throwable $th) {
-            Log::error('ERROR #UC-001', ['error' => $th]);
+            // Faz o log do erro para poder debugar posteriormente.
+            Log::error('ERROR #UC-001', ['error' => $th]); 
+
+            // As mensagens de erro são obrigatórias, ao passar as mensagens no formato abaixo, as mesmas serão exibidas automaticamente no Vue.
+            // sempre será um array de erros, mesmo se for só um erro.
             return response()->json(['errors' => ['custom_errors' => [
-                'Erro ao salvar o usuário, motivo 1. ERROR: #UC-001',
-                'Erro ao salvar o usuário, motivo 2. ERROR: #UC-001'
+                'Erro ao salvar o usuário, motivo 1. ERROR: #UC-001'
             ]]],422);
         }
     }
 ```
 
+---
 ### customization
 
 ```js
