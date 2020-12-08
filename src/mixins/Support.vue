@@ -28,7 +28,7 @@ export default {
             method,
             url,
             data = {},
-            { shouldDisplayToast = true, onStart = () => ({}), onFinish = () => ({}), onSuccess = () => ({}) } = {}
+            { resetForm = null, shouldDisplayToast = true, onStart = () => ({}), onFinish = () => ({}), onSuccess = () => ({}) } = {}
         ) {
             onStart()
             this.sbErrors = {}
@@ -40,7 +40,9 @@ export default {
                     .post(url, data)
                     .then((response) => {
                         this.then(response)
-                        this.form = {}
+                        if(resetForm !== false){
+                            this.form = {}
+                        }
                         onSuccess()
                     })
                     .catch((error) => {
@@ -55,6 +57,9 @@ export default {
                     .put(url, data)
                     .then((response) => {
                         this.then(response)
+                        if(resetForm === true){
+                            this.form = {}
+                        }
                         onSuccess()
                     })
                     .catch((error) => {

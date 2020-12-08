@@ -19,7 +19,7 @@ this.request("post", this.route, this.form);
 ### Com opcionais:
 
 ```js
-this.request("post", `${this.route}`, this.form, {
+this.request("post", this.route, this.form, {
   onSuccess: () => { // método a ser chamado se o post der certo
     this.$emit("saved");
     this.showModal = false;
@@ -77,5 +77,37 @@ var app = new Vue({
         }
     },
     mixins: [require('spark')],
+});
+```
+
+--- 
+
+### parametros
+
+```php
+resetForm: boolean
+// Determina se o form vai ser resetado depois do post/put.
+// Por padrão no método post o resetForm é true,
+// e no método put o padrão é false
+
+shouldDisplayToast: boolean
+// Determina se tem que exibir o toast ou não 
+// o padrão é true
+
+onSuccess: função anonima
+// Coloque aqui dentro o que deve ser feito depois do post/put ser terminado com sucesso.
+
+```
+
+```js
+Exemplo
+
+this.request("post", this.route, this.form, {
+  shouldDisplayToast: false,
+  resetForm:false,
+  onSuccess: () => {
+      this.$emit("saved");
+      this.showModal = false;
+  },
 });
 ```
