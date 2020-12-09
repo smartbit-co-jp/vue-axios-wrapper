@@ -124,3 +124,20 @@ this.request("post", this.route, this.form, {
 
 result
 ![alt text](img/warning-button.png)
+
+---
+
+### pick image 
+
+```js
+<pick-image
+    button-text="escolha uma imagem" // opcional (padrão "pick a image")
+    v-model="image"
+    :path.sync="path" // path inicial da imagem
+></pick-image>
+```
+
+result
+![alt text](img/tucano.png)
+
+---
