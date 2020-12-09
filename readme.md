@@ -129,11 +129,23 @@ result
 
 ### pick image 
 
+on vue component
+
 ```js
+
 <pick-image
     button-text="escolha uma imagem" // opcional (padrão "pick a image")
     v-model="image"
-    :path.sync="path" // path inicial da imagem
+    :path="path" // path inicial da imagem
+></pick-image>
+```
+
+on blade
+
+```js
+<pick-image
+    path="{{ $person->photo_url }}"
+    name="photo"
 ></pick-image>
 ```
 
