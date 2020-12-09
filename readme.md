@@ -1,10 +1,5 @@
-- [Custom components](#-custom-components)
-  - [sending button](#loading-button)
-  - [date picker](#date-picker)
-
 # Request Mixin usage
 
----
 
 ### Modo de usar básico:
 
@@ -111,3 +106,21 @@ this.request("post", this.route, this.form, {
   },
 });
 ```
+
+---
+
+### loading button
+
+```js
+<loading-button 
+    @click="sendForm" // chama seu método.
+    :loading="sbSending" 
+    variant="warning" // Cor do botão opcional (padrão success)
+    class="mt-2 float-right" // classe opcional
+>
+    salvar // Valor do botão opcional (padrão save)
+</loading-button>
+```
+
+result
+![alt text](img/warning-button.png)
