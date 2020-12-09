@@ -15,8 +15,8 @@ export default {
             }
         },
         catch(error, shouldDisplayToast) {
-            this.sbErrors = error.response.data.errors || []
-            if (this.isset(() => error.response.data.errors.custom_errors)) {
+            this.sbErrors = this.sbIsset(() => error.response.data.errors) ? error.response.data.errors : []
+            if (this.sbIsset(() => error.response.data.errors.custom_errors)) {
                 if (shouldDisplayToast) {
                     error.response.data.errors.custom_errors.forEach((error, index, array) => {
                         this.sbToast(error, { variant: "danger" })
@@ -81,17 +81,24 @@ export default {
             }
         },
         sbToast(message, options = {}) {
-            options.title = this.isset(() => this.$root.sbAxiosWrapper.toast.title)
+            options.title = this.sbIsset(() => this.$root.sbAxiosWrapper.toast.title)
                 ? this.$root.sbAxiosWrapper.toast.title
                 : "info"
-            message = this.isset(() => this.$root.sbAxiosWrapper.toast.defaultMessage)
+            message = this.sbIsset(() => this.$root.sbAxiosWrapper.toast.defaultMessage)
                 ? this.$root.sbAxiosWrapper.toast.defaultMessage
                 : message
             if (options.variant == null) {
                 options.variant = "info"
             }
             this.$root.$bvToast.toast(message, options)
-        }
+        },
+        sbIsset(accessor) {
+            try {
+                return typeof accessor() !== "undefined"
+            } catch (e) {
+                return false
+            }
+        },
     }
 }
 </script>
