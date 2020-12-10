@@ -1,6 +1,4 @@
 <script>
-import modal from "./modal"
-
 export default {
     data() {
         return {
