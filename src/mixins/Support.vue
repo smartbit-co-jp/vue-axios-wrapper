@@ -3,9 +3,7 @@ export default {
     data() {
         return {
             sbSending: false,
-            sbErrors: [],
-            sbExceptions: [],
-            sbServerError: []
+            sbErrors: []
         }
     },
     methods: {
@@ -17,38 +15,37 @@ export default {
             }
         },
         catch(error, shouldDisplayToast, showErrorsInModal) {
-            this.$root.sbExceptions = []
-            this.$root.sbServerError = ""
-            this.sbErrors = this.sbIsset(() => error.response.data.errors) ? error.response.data.errors : []
 
-            if (this.sbIsset(() => error.response.data.errors.exceptions)) {
-                this.$root.sbErrors = error.response.data.errors.exceptions
-            }
-            if (this.sbIsset(() => error.response.data.exception)) {
-                this.$root.sbServerError = this.$root.sbAxiosWrapper.defaultServerErrorMessage
+            var errors = []
+            if (this.sbIsset(() => error.response.data.errors)) {
+                // set validation errors
+                errors = error.response.data.errors
+            } else if (this.sbIsset(() => error.response.data.exceptions)) {
+                // set exceptions defined in controller
+                errors = error.response.data
+            } else if (this.sbIsset(() => error.response.data.exception)) {
+                // set server exception
+                errors = {}
+                var errorMessage = this.sbIsset(() => this.$root.sbAxiosWrapper.defaultServerErrorMessage)
                     ? this.$root.sbAxiosWrapper.defaultServerErrorMessage
                     : "server error."
+                errors.exceptions = [errorMessage]
             }
-            if (this.sbIsset(() => error.response.data.errors.exceptions)) {
-                this.$root.sbExceptions = error.response.data.errors.exceptions
-            }
+            this.$root.sbErrors = errors
+            this.sbErrors = errors
 
-            if (showErrorsInModal && this.sbIsset(() => error.response.data.errors.exceptions)) {
+            // check if exceptions exists
+            var exceptionsExists =
+                this.sbIsset(() => this.sbErrors.exceptions) || this.sbIsset(() => this.sbErrors.exception)
+
+            // show exceptions in modal
+            if (showErrorsInModal && exceptionsExists) {
                 this.$root.$emit("bv::show::modal", "modalError")
             }
 
-            // exibe erros do servidor
-            if (this.sbIsset(() => this.$root.sbServerError) && this.$root.sbServerError.length) {
-                if (showErrorsInModal) {
-                    this.$root.$emit("bv::show::modal", "modalError")
-                }
-                if (shouldDisplayToast) {
-                    this.sbToast(this.$root.sbServerError, { variant: "danger" })
-                }
-            }
-
-            if (shouldDisplayToast) {
-                this.sbErrors.exceptions.forEach((error, index, array) => {
+            // show exceptions in toast
+            if (shouldDisplayToast && exceptionsExists) {
+                this.sbErrors.exceptions.forEach((error) => {
                     this.sbToast(error, { variant: "danger" })
                 })
             }
@@ -68,9 +65,9 @@ export default {
             } = {}
         ) {
             onStart()
-            this.sbErrors = {}
+            this.$root.sbErrors = []
+            this.sbErrors = []
             this.sbSending = true
-            this.$root.errors = []
 
             if (method === "post") {
                 axios
@@ -85,9 +82,6 @@ export default {
                     .catch((error) => {
                         this.catch(error, shouldDisplayToast, showErrorsInModal)
                         onError(error.response.data)
-                        if (showErrorsInModal && this.sbIsset(() => error.response.data.errors.exceptions)) {
-                            this.$root.$emit("bv::show::modal", "modalError", "#btnShow")
-                        }
                     })
                     .finally(() => {
                         this.sbSending = false

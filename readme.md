@@ -33,7 +33,7 @@ this.request("post", `${this.route}`, this.form, {
 Com o componente abaixo, exiba os erros onde quiser.
 
 ```html
-<display-errors :errors="sbErrors.custom_errors"></display-errors>
+<display-errors :errors="sbErrors.exceptions"></display-errors>
 ```
 
 ### No controller:
@@ -51,7 +51,7 @@ public function store(UserRequest $request)
 
             // As mensagens de erro são obrigatórias, ao passar as mensagens no formato abaixo, as mesmas serão exibidas automaticamente no Vue.
             // sempre será um array de erros, mesmo se for só um erro.
-            return response()->json(['errors' => ['custom_errors' => [
+            return response()->json(['exceptions' => [
                 'Erro ao salvar o usuário, motivo 1. ERROR: #UC-001'
             ]]],422);
         }
@@ -61,36 +61,50 @@ public function store(UserRequest $request)
 ---
 ### customization
 
+resources/js/app.js
+
 ```js
 var app = new Vue({
     data:{
+        defaultServerErrorMessage: 'Error desconhecido.',
         sbAxiosWrapper:{
-          toast:{
-            title: 'ezHaken',
-            defaultMessage: '保存しました。'
-          }
+        toast:{
+          title: 'ezHaken',
+          defaultMessage: '保存しました。'
         }
+      }
     },
-    mixins: [require('spark')],
 });
 ```
 
---- 
+---
 
 ### parametros
 
 ```php
-resetForm: boolean
+resetForm: true,
 // Determina se o form vai ser resetado depois do post/put.
 // Por padrão no método post o resetForm é true,
 // e no método put o padrão é false
 
-shouldDisplayToast: boolean
+shouldDisplayToast: false,
 // Determina se tem que exibir o toast ou não 
 // o padrão é true
 
-onSuccess: função anonima
-// Coloque aqui dentro o que deve ser feito depois do post/put ser terminado com sucesso.
+onSuccess: (response) => {
+  console.log(response)
+},
+
+
+showErrorsInModal:true,
+// coloque o modal abaixo no app.blade.php principal
+<errors-modal></errors-modal>
+
+
+
+onError: (error) => {
+    console.log(error)
+},
 
 ```
 
