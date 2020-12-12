@@ -2,7 +2,7 @@
     <div class="w-100">
         <a href="#.">
             <div @click="showModal = true">
-                <img width="180" v-if="path" :src="this.file ? path :  pathPrepend + path" />
+                <img width="180" v-if="src" :src="src" />
             </div>
         </a>
         <input type="file" :name="name" class="d-none" ref="file" v-on:change="handleFileUpload()" />
@@ -13,7 +13,7 @@
             </button>
         </div>
         <b-modal size="lg" centered no-fade v-model="showModal" hide-header hide-footer>
-            <img class="w-100" v-if="path" :src="this.file ? path : pathPrepend +path" />
+            <img class="w-100" v-if="path" :src="src" />
         </b-modal>
     </div>
 </template>
@@ -34,6 +34,20 @@ export default {
             showModal:false,
             file:"",
         };
+    },
+    computed:{
+        src: function(){
+            if(!this.path){
+                return null
+            }
+            if(this.path.includes('blob')){
+                return this.path
+            }
+            if(this.pathPrepend){
+                return this.pathPrepend + this.path
+            }
+            return this.path
+        }
     },
     methods: {
         handleFileUpload() {
