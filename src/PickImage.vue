@@ -2,7 +2,7 @@
     <div class="w-100">
         <a href="#.">
             <div @click="showModal = true">
-                <img width="180" v-if="newPath || path" :src="newPath || path" />
+                <img width="180" v-if="path" :src="this.file ? path :  pathPrepend + path" />
             </div>
         </a>
         <input type="file" :name="name" class="d-none" ref="file" v-on:change="handleFileUpload()" />
@@ -13,7 +13,7 @@
             </button>
         </div>
         <b-modal size="lg" centered no-fade v-model="showModal" hide-header hide-footer>
-            <img class="w-100" v-if="newPath || path" :src="newPath || path" />
+            <img class="w-100" v-if="path" :src="this.file ? path : pathPrepend +path" />
         </b-modal>
     </div>
 </template>
@@ -21,6 +21,7 @@
 <script>
 export default {
     props: {
+        pathPrepend:null,
         name:String,
         path:null,
         buttonText:{
@@ -32,14 +33,13 @@ export default {
         return {
             showModal:false,
             file:"",
-            newPath:null
         };
     },
     methods: {
         handleFileUpload() {
             this.file = this.$refs.file.files[0];
             this.$emit('input', this.file)
-            this.newPath = URL.createObjectURL(this.file)
+            this.$emit('update:path', URL.createObjectURL(this.file))
         },
     }
 };
