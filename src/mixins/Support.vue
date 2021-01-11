@@ -7,11 +7,13 @@ export default {
         }
     },
     methods: {
-        then(response) {
-            if (response.message) {
+        then(response, shouldDisplayToast) {
+            if (response.message && shouldDisplayToast) {
                 this.sbToast(response.message, { variant: "success" })
             } else {
-                this.sbToast("", { variant: "success" })
+                if(shouldDisplayToast){
+                    this.sbToast("", { variant: "success" })
+                }
             }
         },
         catch(error, shouldDisplayToast, showErrorsInModal) {
@@ -73,7 +75,7 @@ export default {
                 axios
                     .post(url, data)
                     .then((response) => {
-                        this.then(response.data)
+                        this.then(response.data, shouldDisplayToast)
                         if (resetForm !== false) {
                             this.form = {}
                         }
@@ -91,7 +93,7 @@ export default {
                 axios
                     .put(url, data)
                     .then((response) => {
-                        this.then(response.data)
+                        this.then(response.data, shouldDisplayToast)
                         if (resetForm === true) {
                             this.form = {}
                         }
