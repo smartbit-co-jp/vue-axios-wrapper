@@ -79,9 +79,13 @@ var app = new Vue({
 
 ---
 
-### parametros
+### parametros (props)
 
 ```php
+
+showOnlyErrorMessages: false,
+successMessageTimeOut: 1000, // milissegundos
+
 resetForm: true,
 // Determina se o form vai ser resetado depois do post/put.
 // Por padrão no método post o resetForm é true,

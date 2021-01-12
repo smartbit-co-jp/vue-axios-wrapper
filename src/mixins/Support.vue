@@ -7,12 +7,12 @@ export default {
         }
     },
     methods: {
-        then(response, shouldDisplayToast) {
-            if (response.message && shouldDisplayToast) {
-                this.sbToast(response.message, { variant: "success" })
+        then(response, shouldDisplayToast, showOnlyErrorMessages,  successMessageTimeOut) {
+            if (response.message && shouldDisplayToast && !showOnlyErrorMessages) {
+                this.sbToast(response.message, { variant: "success",  autoHideDelay:successMessageTimeOut })
             } else {
-                if(shouldDisplayToast){
-                    this.sbToast("", { variant: "success" })
+                if(shouldDisplayToast && !showOnlyErrorMessages){
+                    this.sbToast("", { variant: "success" , autoHideDelay:successMessageTimeOut})
                 }
             }
         },
@@ -60,6 +60,8 @@ export default {
                 showErrorsInModal = false,
                 resetForm = null,
                 shouldDisplayToast = true,
+                showOnlyErrorMessages = false,
+                successMessageTimeOut = 5000,
                 onStart = () => ({}),
                 onFinish = () => ({}),
                 onSuccess = () => ({}),
@@ -75,7 +77,7 @@ export default {
                 axios
                     .post(url, data)
                     .then((response) => {
-                        this.then(response.data, shouldDisplayToast)
+                        this.then(response.data, shouldDisplayToast, showOnlyErrorMessages, successMessageTimeOut)
                         if (resetForm !== false) {
                             this.form = {}
                         }
@@ -93,7 +95,7 @@ export default {
                 axios
                     .put(url, data)
                     .then((response) => {
-                        this.then(response.data, shouldDisplayToast)
+                        this.then(response.data, shouldDisplayToast, showOnlyErrorMessages, successMessageTimeOut)
                         if (resetForm === true) {
                             this.form = {}
                         }
