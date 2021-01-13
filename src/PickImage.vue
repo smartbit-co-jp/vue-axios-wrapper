@@ -23,7 +23,7 @@ export default {
     props: {
         pathPrepend:null,
         name:String,
-        path:null,
+        initialPath:null,
         buttonText:{
             type:String,
             default:'pick a image'
@@ -33,6 +33,7 @@ export default {
         return {
             showModal:false,
             file:"",
+            path:""
         };
     },
     computed:{
@@ -49,11 +50,14 @@ export default {
             return this.path
         }
     },
+    mounted() {
+        this.path = this.initialPath
+    },
     methods: {
         handleFileUpload() {
             this.file = this.$refs.file.files[0];
             this.$emit('input', this.file)
-            this.$emit('update:path', URL.createObjectURL(this.file))
+            this.path = URL.createObjectURL(this.file)
         },
     }
 };
