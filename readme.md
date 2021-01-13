@@ -155,7 +155,7 @@ on vue component
     button-text="escolha uma imagem" // opcional (padrão "pick a image")
     v-model="image"
     path-prepend="/example/" // opcional
-    :path.sync="image_path" // path inicial da imagem
+    :initial-path="image_path" // path inicial da imagem
 ></pick-image>
 ```
 
@@ -164,7 +164,7 @@ on blade
 ```js
 <pick-image
     path-prepend="/example/"
-    path="{{ $person->photo_url }}"
+    initial-path="{{ $person->photo_url }}"
     name="photo"
 ></pick-image>
 ```
