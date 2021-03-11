@@ -73,7 +73,25 @@ export default {
             this.sbErrors = []
             this.sbSending = true
 
-            if (method === "post") {
+            if (method === 'get'){
+                 axios
+                    .get(url)
+                    .then((response) => {
+                        onSuccess(response.data)
+                    })
+                    .catch((error) => {
+                        this.catch(error, shouldDisplayToast, showErrorsInModal)
+                        if(error.response){
+                            onError(error.response.data)
+                        }else{
+                            console.log(error)
+                        }
+                    })
+                    .finally(() => {
+                        this.sbSending = false
+                        onFinish()
+                    })
+            }else if (method === "post") {
                 axios
                     .post(url, data)
                     .then((response) => {
@@ -85,7 +103,11 @@ export default {
                     })
                     .catch((error) => {
                         this.catch(error, shouldDisplayToast, showErrorsInModal)
-                        onError(error.response.data)
+                        if(error.response){
+                            onError(error.response.data)
+                        }else{
+                            console.log(error)
+                        }
                     })
                     .finally(() => {
                         this.sbSending = false
@@ -103,7 +125,11 @@ export default {
                     })
                     .catch((error) => {
                         this.catch(error, shouldDisplayToast, showErrorsInModal)
-                        onError(error.response.data)
+                        if(error.response){
+                            onError(error.response.data)
+                        }else{
+                            console.log(error)
+                        }
                     })
                     .finally(() => {
                         this.sbSending = false

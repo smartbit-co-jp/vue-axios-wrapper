@@ -72,6 +72,7 @@ var app = new Vue({
           title: 'ezHaken',
           defaultMessage: '保存しました。'
         }
+        permissionDeniedMessage: 'permission denied',
       }
     },
 });
