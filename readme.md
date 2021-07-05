@@ -1,14 +1,14 @@
 # AxiosWrapper Usage
 
-## Basic usage:
+## Basic usage
 
-### PUT or POST.
+### PUT or POST
 
 ```js
 this.request("post", this.route, this.form);
 ```
 
-### With callback function.
+### With callback function
 
 ```js
 this.request("post", this.route, this.form, {
@@ -18,7 +18,7 @@ this.request("post", this.route, this.form, {
 });
 ```
 
-### GET.
+### GET
 
 ```js
 this.request("get", this.route, {}, {
@@ -30,7 +30,7 @@ this.request("get", this.route, {}, {
 
 ---
 
-### With options:
+### With options
 
 ```js
 this.request("post", this.route, this.form, {
@@ -67,20 +67,21 @@ this.request("post", this.route, this.form, {
 
 });
 ```
-## instalation:
+
+## installation
 
 ```console
 npm install sb-axios-wrapper
 ```
 
-Import libraries in entry file:
+Then, register axios-wrapper in your app entry point (typically app.js or main.js):
+
 ```console
 import AxiosWrapper from 'sb-axios-wrapper'
 Vue.use(AxiosWrapper)
 ```
 
-
-### Important: this mixin add 2 attributes to component
+### Important: this mixin adds 2 attributes to the component mixin
 
 ```js
 
@@ -90,3 +91,7 @@ processing: (boolean)
 // errors contain validation errors
 errors: (array)
 ```
+
+
+
+
