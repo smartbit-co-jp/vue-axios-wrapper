@@ -35,10 +35,10 @@ this.request("get", this.route, {}, {
 ```js
 this.request("post", this.route, this.form, {
 
-    // (default is true)
+    // (defaul is true)
     shouldNotifyError: false,
 
-    // (default is true)
+    // (defaul is true)
     shouldNotifySuccess: false,
 
     // these options will be passed to the notify function to be provided by you as a global function.
@@ -65,6 +65,28 @@ this.request("post", this.route, this.form, {
     //     this.$root.$bvToast.toast(options.message, toastOptions)
     // }
 
-
 });
+```
+## instalation:
+
+```console
+npm install sb-axios-wrapper
+```
+
+Import libraries in entry file:
+```console
+import AxiosWrapper from 'sb-axios-wrapper'
+Vue.use(AxiosWrapper)
+```
+
+
+### Important: this mixin add 2 attributes to component
+
+```js
+
+// true when request is in proccess
+processing: (boolean)
+
+// errors contain validation errors
+errors: (array)
 ```
