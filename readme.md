@@ -35,10 +35,10 @@ this.request("get", this.route, {}, {
 ```js
 this.request("post", this.route, this.form, {
 
-    // (defaul is true)
+    // (default is true)
     shouldNotifyError: false,
 
-    // (defaul is true)
+    // (default is true)
     shouldNotifySuccess: false,
 
     // these options will be passed to the notify function to be provided by you as a global function.
