@@ -53,7 +53,7 @@ export default {
 
                             successOptions.message = response.data.message
 
-                            if (!response.data.success && shouldNotifyError) {
+                            if (response.data.error && shouldNotifyError) {
                                 errorOptions.message = response.data.message
                                 this.notify(errorOptions)
                                 return
