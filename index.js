@@ -30,7 +30,6 @@ export default {
                     onStart()
                     this.errors = []
                     this.processing = true
-                    // TODO implement delete method
                     if (method === 'get') {
                         axios.get(url).then((response) => {
                             onSuccess(response)
@@ -52,12 +51,6 @@ export default {
                         axios[method](url, data).then((response) => {
 
                             successOptions.message = response.data.message
-
-                            if (response.data.error && shouldNotifyError) {
-                                errorOptions.message = response.data.message
-                                this.notify(errorOptions)
-                                return
-                            }
 
                             if (shouldNotifySuccess) {
                                 this.notify(successOptions)
@@ -84,6 +77,28 @@ export default {
                             } else {
                                 throw error;
                             }
+                        }).finally(() => {
+                            this.processing = false
+                            onFinish()
+                        })
+                    }else  if (method === 'delete') {
+                        axios.delete(url).then((response) => {
+                            successOptions.message = response.data.message
+
+                            if (shouldNotifySuccess) {
+                                this.notify(successOptions)
+                            }
+                            onSuccess(response)
+                        }).catch((error) => {
+
+                            if (error.response) {
+                                errorOptions.message = error.response.data.message
+                                this.notify(errorOptions)
+                                onError(error)
+                            } else {
+                                throw error;
+                            }
+
                         }).finally(() => {
                             this.processing = false
                             onFinish()
