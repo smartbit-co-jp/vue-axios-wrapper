@@ -1,6 +1,9 @@
 export default {
     install(Vue, options) {
-
+        let eventBus = options.eventBus
+        if (!(eventBus instanceof Vue)) {
+            eventBus = new Vue({})
+        }
         Vue.mixin({
             data() {
                 return {
@@ -25,19 +28,35 @@ export default {
                         shouldNotifySuccess = true,
                     } = {}
                 ) {
-                    errorOptions.type = 'error'
-                    successOptions.type = 'success'
                     onStart()
                     this.errors = []
                     this.processing = true
+
+                   let manageErrors = (error) => {
+                        errorOptions.type = 'error'
+                        errorOptions.message = error.response.data.message
+                        errorOptions.messages = error.response.data.messages
+                        this.errors = error.response.data.errors || []
+                        if (shouldNotifyError) {
+                            eventBus.$emit('notify', errorOptions);
+                        }
+                    }
+                    let manageSuccess = (response) => {
+                        successOptions.type = 'success'
+                        successOptions.message = response.data.message
+                        successOptions.messages = response.data.messages
+                        if (shouldNotifySuccess) {
+                            eventBus.$emit('notify', successOptions);
+                        }
+                    }
+
                     if (method === 'get') {
                         axios.get(url).then((response) => {
                             onSuccess(response)
                         }).catch((error) => {
 
                             if (error.response) {
-                                errorOptions.message = error.response.data.message
-                                this.notify(errorOptions)
+                                manageErrors(error)
                                 onError(error)
                             } else {
                                 throw error;
@@ -49,31 +68,16 @@ export default {
                         })
                     } else if (method === "post" || method === 'put') {
                         axios[method](url, data).then((response) => {
-
-                            successOptions.message = response.data.message
-
-                            if (shouldNotifySuccess) {
-                                this.notify(successOptions)
-                            }
-
+                            manageSuccess(response)
                             if (resetForm === true) {
                                 this.form = {}
                             }
-
                             onSuccess(response)
 
                         }).catch((error) => {
                             if (error.response) {
-
-                                errorOptions.message = error.response.data.message
-                                this.errors = error.response.data.errors || []
-
-                                if (shouldNotifyError) {
-                                    this.notify(errorOptions)
-                                }
-
+                                manageErrors(error)
                                 onError(error)
-
                             } else {
                                 throw error;
                             }
@@ -81,19 +85,14 @@ export default {
                             this.processing = false
                             onFinish()
                         })
-                    }else  if (method === 'delete') {
+                    } else if (method === 'delete') {
                         axios.delete(url).then((response) => {
-                            successOptions.message = response.data.message
-
-                            if (shouldNotifySuccess) {
-                                this.notify(successOptions)
-                            }
+                            manageSuccess(response)
                             onSuccess(response)
                         }).catch((error) => {
 
                             if (error.response) {
-                                errorOptions.message = error.response.data.message
-                                this.notify(errorOptions)
+                                manageErrors(error)
                                 onError(error)
                             } else {
                                 throw error;
