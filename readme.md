@@ -49,22 +49,6 @@ this.request("post", this.route, this.form, {
         timeout: 2000,
     }
 
-    // Notify function to be provided by you as a global function (put in mixin).
-    // This function is only a example.
-    // notify(options = {}) {
-    //     let toastOptions = {}
-    //     if (options.type === 'success') {
-    //         toastOptions.variant =  options.variant || "success"
-    //         toastOptions.autoHideDelay = options.timeout || 1000
-    //     } else if (options.type === 'error') {
-    //         toastOptions.autoHideDelay = options.timeout || 3000
-    //         toastOptions.variant = options.variant || 'danger'
-    //     }
-    //     toastOptions.title = options.title || "Notification"
-
-    //     this.$root.$bvToast.toast(options.message, toastOptions)
-    // }
-
 });
 ```
 
@@ -92,6 +76,17 @@ processing: (boolean)
 errors: (array)
 ```
 
+## Listen for package event
 
+This package emit a "notify" event with status ("success" or "error") and the message (or messages) from response which can be used to display a notification to the user.
 
+```js
 
+const app = new Vue({
+    el: '#app',
+});
+
+app.$root.$on('notify', (options) => {
+    console.log(options)
+})
+```

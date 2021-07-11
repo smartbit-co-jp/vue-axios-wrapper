@@ -1,9 +1,6 @@
 export default {
-    install(Vue, options) {
-        let eventBus = options.eventBus
-        if (!(eventBus instanceof Vue)) {
-            eventBus = new Vue({})
-        }
+    install(Vue, options ) {
+
         Vue.mixin({
             data() {
                 return {
@@ -33,20 +30,20 @@ export default {
                     this.processing = true
 
                    let manageErrors = (error) => {
-                        errorOptions.type = 'error'
+                        errorOptions.status = 'error'
                         errorOptions.message = error.response.data.message
                         errorOptions.messages = error.response.data.messages
                         this.errors = error.response.data.errors || []
                         if (shouldNotifyError) {
-                            eventBus.$emit('notify', errorOptions);
+                            this.$root.$emit('notify', errorOptions)
                         }
                     }
                     let manageSuccess = (response) => {
-                        successOptions.type = 'success'
+                        successOptions.status = 'success'
                         successOptions.message = response.data.message
                         successOptions.messages = response.data.messages
                         if (shouldNotifySuccess) {
-                            eventBus.$emit('notify', successOptions);
+                            this.$root.$emit('notify', successOptions)
                         }
                     }
 
