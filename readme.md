@@ -62,18 +62,16 @@ Then, register axios-wrapper in your app entry point (typically app.js or main.j
 
 ```console
 import AxiosWrapper from 'sb-axios-wrapper'
-Vue.use(AxiosWrapper)
+Vue.mixin(AxiosWrapper)
 ```
 
-### Important: this mixin adds 2 attributes to the component mixin
+### Important: this mixin adds 4 attributes to the component mixin
 
 ```js
-
-// true when request is in proccess
-processing: (boolean)
-
-// errors contain validation errors
-errors: (array)
+requestProcessing: (boolean)
+responseErrors: (Object)  // (validation errors)
+responseMessage: (string)
+responseMessages: (array)
 ```
 
 ## Listen for package event
